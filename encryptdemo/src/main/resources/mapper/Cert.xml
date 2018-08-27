@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcits.app.dao.CertDao">
+    <select id="countLceByType" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1) from certificateinfo a,
+        (select v.*, e.address as eaddress,e.companyName,e.contactName,e.contactNo,e.email as
+        eemail,e.licenseNo,e.licenseCopy,e.taxCopy,e.taxNo
+        from (
+        select w.*,p.realName,p.qqNo,p.phoneNo,p.email,p.address
+        from (
+        select t.*, u.usertype from audit t, `user_` u
+        where
+        <if test=' audited != "0" '>
+            t.audited = #{audited} and
+        </if>
+        <if test=' audited != "1" '>
+            t.audited is NULL and
+        </if>
+        t.userid=u.userid and t.applyType like '${type}' and t.state in
+        <foreach collection="state" index="index" item="state" open="(" separator="," close=")">
+            #{state}
+        </foreach>
+        and u.usertype in
+        <foreach collection="userType" index="index" item="t" open="(" separator="," close=")">
+            #{t}
+        </foreach>
+        ) w left join personuser p on w.userid=p.userid
+        ) v left join enterpriseuser e
+        on v.userid=e.userid
+        ) u
+        where u.appid = a.appid and u.userid = a.userid
+    </select>
+
+    <select id="getDetailLce" parameterType="java.lang.String"
+            resultType="java.util.Map">
+      select a.email as caemail,a.country,a.provinces,a.city,a.companyname,a.departmentname,a.nickname,u.* from certificateinfo a,
+      (select v.*, e.address as eaddress,e.companyName,e.contactName,e.contactNo,e.email as eemail,e.licenseNo,e.licenseCopy,e.taxCopy,e.taxNo
+         from (
+            select w.*,p.realName,p.qqNo,p.phoneNo,p.email,p.address
+            from (
+               select t.*, u.usertype, u.username from audit t, `user_` u
+               where t.userid=u.userid and t.auditid=#{value}
+               ) w left join personuser p on w.userid=p.userid
+         ) v left join enterpriseuser e
+         on v.userid=e.userid
+      ) u
+      where u.appid = a.appid and u.userid = a.userid
+</select>
+</mapper>

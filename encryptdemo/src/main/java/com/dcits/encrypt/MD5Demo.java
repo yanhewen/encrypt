@@ -17,4 +17,14 @@ public class MD5Demo {
     md5.update(data);
     return md5.digest();
   }
+
+  private static String byteToHexString(byte[] bytes){
+    StringBuffer sbf = new StringBuffer(bytes.length*2);
+    for (int i = 0; i < bytes.length; i++) {
+
+    }
+
+    return "";
+  }
+
 }
