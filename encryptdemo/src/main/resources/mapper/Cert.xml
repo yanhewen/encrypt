@@ -41,7 +41,7 @@
             select w.*,p.realName,p.qqNo,p.phoneNo,p.email,p.address
             from (
                select t.*, u.usertype, u.username from audit t, `user_` u
-               where t.userid=u.userid and t.auditid=#{value}
+               where t.userid=u.userid and t.auditid=#{id}
                ) w left join personuser p on w.userid=p.userid
          ) v left join enterpriseuser e
          on v.userid=e.userid

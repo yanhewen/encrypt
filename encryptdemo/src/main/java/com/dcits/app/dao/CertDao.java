@@ -9,5 +9,5 @@ import java.util.Map;
 @Mapper
 @Repository
 public interface CertDao {
-    Map<String, Object> getAuditDetailLce(@Param("id") String id);
+    Map<String, Object> getDetailLce(@Param("id") String id);
 }

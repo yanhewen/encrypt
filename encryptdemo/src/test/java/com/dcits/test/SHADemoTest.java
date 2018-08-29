@@ -5,6 +5,7 @@ import org.junit.Test;
 public class SHADemoTest {
 
     @Test
-    public void test(){}
+    public void test() {
+    }
 
 }
